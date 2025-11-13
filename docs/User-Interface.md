@@ -1,1 +1,1 @@
-Protótipo Figma:
+Protótipo Figma: https://www.figma.com/design/FzBwLCmm6vTEBvuuf964jO/AutoUrMail?node-id=0-1&t=VFYVp1oCN2B7LKMj-1
