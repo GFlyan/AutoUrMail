@@ -5,7 +5,7 @@ from PyPDF2 import PdfReader
 import os
 from io import BytesIO
 
-api_key = os.environ.get("GENAI_API_KEY")
+api_key = os.getenv("GENAI_API_KEY")
 client = genai.Client(api_key=api_key)
 
 def analyseStatusEmail(email: Email):
