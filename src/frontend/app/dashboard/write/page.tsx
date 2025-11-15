@@ -74,7 +74,7 @@ export default function Page() {
                 <input placeholder="Qual é o assunto?" type="text" value={subject} onChange={(e) => setSubject(e.target.value)} className="bg-[#5c5e65] h-[35px] border rounded-3xl pl-5 focus:outline-none"/>
                 <div className="h-2.5"/>
                 <p>Email:</p>
-                <textarea placeholder="Digite o email..." value={message} onChange={(e) => setMessage(e.target.value)} className="bg-[#5c5e65] h-[100px] min-[380px]:h-[150px] min-[420px]:h-[190px] md:h-60 xl:h-[300px] 2xl:h-[475px] border rounded-3xl px-5 py-2 focus:outline-none resize-none"></textarea>
+                <textarea placeholder="Digite o email..." value={message} onChange={(e) => setMessage(e.target.value)} className="bg-[#5c5e65] h-[100px] min-[380px]:h-[150px] min-[420px]:h-[190px] md:h-60 xl:h-[300px] 2xl:h-[475px] border rounded-3xl px-5 py-2 focus:outline-none resize-none scrollbar-custom"></textarea>
             </div>
             {send ? (
             <>
@@ -87,7 +87,7 @@ export default function Page() {
                     <div>
                         <p>Resposta Gerada:</p>
                         <div className="h-40 min-[380px]:h-[210px] min-[420px]:h-[250px] md:h-[310px] 2xl:h-[490px] border rounded-3xl bg-[#5c5e65] mt-0.5">
-                            <div className="h-[100px] min-[380px]:h-[150px] min-[420px]:h-[190px] md:h-60 2xl:h-[425px] px-5 py-2 overflow-y-auto">
+                            <div className="h-[100px] min-[380px]:h-[150px] min-[420px]:h-[190px] md:h-60 2xl:h-[425px] px-5 py-2 overflow-y-auto scrollbar-custom">
                                 {data.message}
                             </div>
                             <div className="h-px border"/>

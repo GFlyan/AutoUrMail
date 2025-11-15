@@ -86,7 +86,7 @@ export default function Page() {
                     <div>
                         <p>Resposta Gerada:</p>
                         <div className="h-40 min-[380px]:h-60 min-[420px]:h-[280px] md:h-[330px] 2xl:h-[490px] border rounded-3xl bg-[#5c5e65] mt-0.5">
-                            <div className="h-[100px] min-[380px]:h-[180px] min-[420px]:h-[220px] md:h-[260px] 2xl:h-[425px] px-5 py-2 overflow-y-auto">
+                            <div className="h-[100px] min-[380px]:h-[180px] min-[420px]:h-[220px] md:h-[260px] 2xl:h-[425px] px-5 py-2 overflow-y-auto scrollbar-custom">
                                 {data.message}  
                             </div>
                             <div className="h-px border"/>
