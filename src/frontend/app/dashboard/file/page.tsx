@@ -1,77 +1,107 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { AnalysisButton, CopyButton, NewAnalysisButton, TypeFileButton } from "@/app/components/Button";
+import { AnalysisButton, CopyButton, NewAnalysisButton, PDFFileButton, TXTFileButton } from "@/app/components/Button";
 import { EmailStatus } from "@/app/components/Status";
+import { FileUploadSection } from "@/app/components/FileUpload";
+import Spinner from "@/app/components/Spinner";
+
+type Analysis = {
+    status: boolean,
+    message: string;
+}
 
 export default function Page() {
-    const [complete, setComplete] = useState(true);
-    const [result, setResult] = useState(true);
-    const [send, setSend] = useState(true);
+    const searchParams = useSearchParams();
+    const option = searchParams.get('option') ?? 'pdf';
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [data, setData] = useState<Analysis | null>(null);
+    const [complete, setComplete] = useState(false);
+    const [result, setResult] = useState(false);
+    const [send, setSend] = useState(false);
 
-    const [pdf, setPdf] = useState(true);
-    const [txt, seTxt] = useState(false);
-    const handleClickPDF = () => {
-        if(!pdf) {
-        setPdf(!pdf);
-        seTxt(!txt);
+    const handleFileSelect = (file: File | null) => {
+        setSelectedFile(file);
+    };
+
+    useEffect(()=>{
+        if(selectedFile) setComplete(true);
+        else setComplete(false);
+    }, [selectedFile])
+
+    const handleSubmit = () => {
+        setSend(true);
+        const getData = async () => {
+            const formData = new FormData();
+            formData.append("file", selectedFile!);
+            try {
+                let response;   
+                if(option === "pdf") {
+                    response = await fetch("https://autourmail.onrender.com/pdf-file", {
+                        method: "POST",
+                        body: formData, // não precisa setar Content-Type, o fetch faz isso automaticamente
+                    });
+                }
+                else {
+                    response = await fetch("https://autourmail.onrender.com/txt-file", {
+                        method: "POST",
+                        body: formData, // fetch detecta multipart automaticamente
+                    })
+                }
+                const resultData: Analysis  = await response.json();
+                console.log(resultData);
+                setData(resultData);
+                setResult(true);
+            } catch(error) {
+                console.error("Erro ao enviar arquivo:", error);
+                setResult(false);
+                setSend(false);
+            }
+        }
+        getData();
     }
-    }
-    
-    const handleClickTXT = () => {
-        if(!txt) {
-        seTxt(!txt);
-        setPdf(!pdf);
-    }
-    }
+   
     return(
         <div className="h-full w-full flex flex-col xl:flex-row gap-2.5">
             <div className="flex flex-col w-full">
                 <p>Tipo de Arquivo:</p>
                 <div className=" flex gap-2">
-                    <TypeFileButton name="PDF" select={pdf} handleClick={handleClickPDF} />
-                    <TypeFileButton name="TXT" select={txt} handleClick={handleClickTXT} />
+                    <PDFFileButton option={option}/>
+                    <TXTFileButton option={option}/>
                 </div>
                 <div className="h-2.5"/>
                 <p>Arquivo Selecionado:</p>
-                {pdf && (<input type="file" accept="application/pdf" className="bg-[#5c5e65] h-[100px] min-[380px]:h-[180px] min-[420px]:h-[220px] md:h-[260px] xl:h-[380px] 2xl:h-[545px] border rounded-3xl px-5 py-2 focus:outline-none resize-none cursor-pointer"/>)}
-                {txt && (<input type="file" accept="application/plain" className="bg-[#5c5e65] h-[100px] min-[380px]:h-[180px] min-[420px]:h-[220px] md:h-[260px] xl:h-[380px] 2xl:h-[545px] border rounded-3xl px-5 py-2 focus:outline-none resize-none cursor-pointer"/>)}
+                <FileUploadSection option={option} onFileSelect={handleFileSelect}/>
             </div>
             {send ? (
             <>
-                {result ? (
+                {data && result ? (
                 <div className="w-full flex flex-col gap-2.5">
                     <div>
                         <p>Status:</p>
-                        <EmailStatus result={true}/>
+                        <EmailStatus result={data.status}/>
                     </div>
                     <div>
                         <p>Resposta Gerada:</p>
-                        <div className="h-40 min-[380px]:h-[240px] min-[420px]:h-[280px] md:h-[330px] 2xl:h-[490px] border rounded-3xl bg-[#5c5e65] mt-0.5">
+                        <div className="h-40 min-[380px]:h-60 min-[420px]:h-[280px] md:h-[330px] 2xl:h-[490px] border rounded-3xl bg-[#5c5e65] mt-0.5">
                             <div className="h-[100px] min-[380px]:h-[180px] min-[420px]:h-[220px] md:h-[260px] 2xl:h-[425px] px-5 py-2 overflow-y-auto">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure sunt officiis totam eius, enim fuga sequi quia aliquam voluptate provident, tenetur obcaecati harum sapiente veritatis! Cum beatae molestias provident rem?
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure sunt officiis totam eius, enim fuga sequi quia aliquam voluptate provident, tenetur obcaecati harum sapiente veritatis! Cum beatae molestias provident rem?
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure sunt officiis totam eius, enim fuga sequi quia aliquam voluptate provident, tenetur obcaecati harum sapiente veritatis! Cum beatae molestias provident rem?
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure sunt officiis totam eius, enim fuga sequi quia aliquam voluptate provident, tenetur obcaecati harum sapiente veritatis! Cum beatae molestias provident rem?
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure sunt officiis totam eius, enim fuga sequi quia aliquam voluptate provident, tenetur obcaecati harum sapiente veritatis! Cum beatae molestias provident rem?
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure sunt officiis totam eius, enim fuga sequi quia aliquam voluptate provident, tenetur obcaecati harum sapiente veritatis! Cum beatae molestias provident rem?
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure sunt officiis totam eius, enim fuga sequi quia aliquam voluptate provident, tenetur obcaecati harum sapiente veritatis! Cum beatae molestias provident rem?
-
+                                {data.message}  
                             </div>
                             <div className="h-px border"/>
                             <div className="flex justify-center items-center pt-2.5">
-                                <CopyButton/>
+                                <CopyButton text={data.message}/>
                             </div>
                         </div>
                     </div>
                     <div className="mt-1">
-                        <NewAnalysisButton/>
+                        <NewAnalysisButton option={option}/>
                     </div>
                 </div>
                 ):(
                 <div className="w-full h-full flex justify-center items-center">
-                    <div className="w-16 md:w-20 h-16 md:h-20 lg:w-24 lg:h-24 xl:w-32 xl:h-32 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                    <Spinner/>
                 </div>)}    
             </>
             ):(
@@ -96,7 +126,7 @@ export default function Page() {
                             <p> O arquivo fornecido já está pronto para  ser analisado!</p>
                         </div>
                         <div className="h-5"/>
-                        <AnalysisButton/>
+                        <AnalysisButton handleSubmit={handleSubmit}/>
                     </div>):(
                     <div className="w-full h-full flex flex-col justify-center items-center">
                         <Image
