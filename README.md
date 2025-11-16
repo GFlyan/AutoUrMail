@@ -126,7 +126,13 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-4. **Execute o frontend:**
+4. **GENAI_API_KEY**
+
+```bash
+É necessário criar na raiz do backend um arquivo .env contendo a sua chave de API do Gemini obtido no Google AI Studio.
+```
+
+5. **Execute o frontend:**
 
 ```bash
 cd frontend
@@ -134,7 +140,7 @@ npm install
 npm run dev
 ```
 
-5. **Acesse a aplicação:**
+6. **Acesse a aplicação:**
 
 ```bash
 Abra o navegador em http://localhost:3000
@@ -151,7 +157,7 @@ Backend (FastAPI) – Render: https://autourmail.onrender.com
 ## 📹 Demonstração em Vídeo
 
 Veja uma demonstração da aplicação em funcionamento:
-[Link do vídeo no YouTube]()
+[Link do vídeo no YouTube](https://youtu.be/t3jaDrcG3S0)
 
 ✅ Critérios Atendidos
 
